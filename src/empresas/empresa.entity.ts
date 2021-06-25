@@ -1,10 +1,12 @@
-import { User } from 'src/auth/user.entity';
 import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class Empresa {
   @ObjectIdColumn()
   _id: ObjectID;
+
+  @Column({ unique: true })
+  alias: string;
 
   @Column({ unique: true })
   name: string;

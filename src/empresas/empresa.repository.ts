@@ -1,5 +1,5 @@
 import { ConflictException } from '@nestjs/common';
-import { EntityRepository, ObjectID, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { CrearEmpresaDto } from './dto/Empresa.dto';
 import { Empresa } from './empresa.entity';
 

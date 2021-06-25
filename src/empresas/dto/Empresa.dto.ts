@@ -3,6 +3,9 @@ import { User } from 'src/auth/user.entity';
 
 export class CrearEmpresaDto {
   @IsString()
+  alias: string;
+
+  @IsString()
   @IsNotEmpty()
   name: string;
 
