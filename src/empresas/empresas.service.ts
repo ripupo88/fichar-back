@@ -28,6 +28,7 @@ export class EmpresasService {
 
     for (const empresa of empresas) {
       const resp = {
+        alias: empresa.alias,
         name: empresa.name,
         cif: empresa.cif,
         activeUsers: [],

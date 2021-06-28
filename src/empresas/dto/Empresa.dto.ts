@@ -23,6 +23,9 @@ export class CrearEmpresaDto {
 
 export class getAllEmpDto {
   @IsString()
+  alias: string;
+
+  @IsString()
   @IsNotEmpty()
   name: string;
 
