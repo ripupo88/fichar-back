@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   ActivateUserDto,
   CreateUserDto,
+  LoggedDto,
   LoginUserDto,
 } from './dto/auth-credential.dto';
 import { UserRepository } from './users.repository';
@@ -28,7 +29,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async singUp(userData: CreateUserDto): Promise<void> {
+  async singUp(userData: CreateUserDto): Promise<LoggedDto> {
     const { username, role, code } = userData;
     let empresaId: string;
     const exist = await this.userRepository.find({ username });
@@ -53,15 +54,19 @@ export class AuthService {
         { _id: empresa[0]._id },
         { trabajadores: [...empresa[0].trabajadores, userId] },
       );
+    return await this.singIn(userData);
   }
 
-  async singIn(userData: LoginUserDto): Promise<{ accesToken: string }> {
+  async singIn(userData: LoginUserDto): Promise<LoggedDto> {
     const { username, password } = userData;
     const user = await this.userRepository.findOne({ username });
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { username, role: user.role };
       const accesToken = await this.jwtService.sign(payload);
-      return { accesToken };
+      await this.userRepository.setToken(user._id, accesToken);
+      delete user.password;
+      delete user.Token;
+      return { user, accesToken };
     } else {
       throw new UnauthorizedException();
     }
@@ -76,7 +81,7 @@ export class AuthService {
       { nif, fullName, alias, activo: true, editable: false },
     );
 
-    let newuser = await this.userRepository.findOne({ username });
+    const newuser = await this.userRepository.findOne({ username });
     delete newuser.password;
     return newuser;
   }

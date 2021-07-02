@@ -1,4 +1,3 @@
-import { BadRequestException, ConflictException } from '@nestjs/common';
 import { EntityRepository, ObjectID, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/auth-credential.dto';
 import { User } from './user.entity';
@@ -13,6 +12,17 @@ export class UserRepository extends Repository<User> {
     private empresaRepository: EmpresaRepository,
   ) {
     super();
+  }
+
+  async setToken(_id: ObjectID, token: string) {
+    await this.update({ _id }, { Token: token });
+  }
+
+  async validateToken(token: string) {
+    const user = await this.findOne({ Token: token });
+    console.log(user);
+    if (user) return true;
+    return false;
   }
 
   async createUser(

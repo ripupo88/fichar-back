@@ -30,7 +30,10 @@ export class User {
   editable: boolean;
 
   @Column()
-  empresas?: String[];
+  empresas?: string[];
+
+  @Column()
+  Token?: string;
 
   @Column('boolean', { default: true })
   activo: boolean;

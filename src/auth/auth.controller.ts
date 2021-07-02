@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import {
   ActivateUserDto,
   CreateUserDto,
+  LoggedDto,
   LoginUserDto,
 } from './dto/auth-credential.dto';
 import { User } from './user.entity';
@@ -14,12 +15,12 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('singup')
-  SingUp(@Body() userData: CreateUserDto): Promise<void> {
+  SingUp(@Body() userData: CreateUserDto): Promise<LoggedDto> {
     return this.authService.singUp(userData);
   }
 
   @Post('singin')
-  SingIn(@Body() userData: LoginUserDto): Promise<{ accesToken: string }> {
+  SingIn(@Body() userData: LoginUserDto): Promise<LoggedDto> {
     return this.authService.singIn(userData);
   }
 

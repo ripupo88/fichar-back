@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  isObject,
   IsOptional,
   IsString,
   Matches,
@@ -62,3 +63,26 @@ export class ActivateUserDto {
   @IsString()
   alias: string;
 }
+export class UserDto {
+  @IsString()
+  username: string;
+
+  @IsString()
+  fullName: string;
+
+  @IsString()
+  nif: string;
+
+  @IsString()
+  alias: string;
+}
+
+export type LoggedDto = {
+  user: UserDto;
+  accesToken: string;
+};
+
+export type tokenDecoded = {
+  username: string;
+  role: string;
+};
