@@ -17,7 +17,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EmpresaRepository } from 'src/empresas/empresa.repository';
 import { Empresa } from 'src/empresas/empresa.entity';
 import { User } from './user.entity';
-import { ObjectID } from 'mongodb';
+import { ObjectID } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +55,20 @@ export class AuthService {
         { trabajadores: [...empresa[0].trabajadores, userId] },
       );
     return await this.singIn(userData);
+  }
+
+  async tokenIn(_id: ObjectID): Promise<LoggedDto> {
+    const user = await this.userRepository.findOne({ _id });
+    if (user) {
+      const payload = { username: user.username, role: user.role };
+      const accesToken = await this.jwtService.sign(payload);
+      await this.userRepository.setToken(user._id, accesToken);
+      delete user.password;
+      delete user.Token;
+      return { user, accesToken };
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
   async singIn(userData: LoginUserDto): Promise<LoggedDto> {

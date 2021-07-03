@@ -1,28 +1,23 @@
 import {
-  IsBoolean,
   IsEnum,
-  IsNumber,
-  isObject,
   IsOptional,
   IsString,
   Matches,
-  maxLength,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ObjectID } from 'typeorm';
 
 export class CreateUserDto {
   @IsString()
-  @MinLength(6)
-  @MaxLength(20)
+  @MinLength(2)
+  @MaxLength(20, { message: 'Nombre de usuario muy largo' })
   username: string;
 
   @IsString()
   @MinLength(6)
   @MaxLength(20)
   @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'Password too weak',
+    message: 'Contraseña muy devil',
   })
   password: string;
 
@@ -37,15 +32,15 @@ export class CreateUserDto {
 
 export class LoginUserDto {
   @IsString()
-  @MinLength(6)
-  @MaxLength(20)
+  @MinLength(2)
+  @MaxLength(20, { message: 'Nombre de usuario muy largo' })
   username: string;
 
   @IsString()
   @MinLength(6)
   @MaxLength(20)
   @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'Password too weak',
+    message: 'Contraseña muy devil',
   })
   password: string;
 }

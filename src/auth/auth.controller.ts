@@ -8,6 +8,7 @@ import {
   LoggedDto,
   LoginUserDto,
 } from './dto/auth-credential.dto';
+import { getUser } from './get-user.decorator';
 import { User } from './user.entity';
 
 @Controller('auth')
@@ -29,6 +30,12 @@ export class AuthController {
   @UseGuards(RoleGuard(['ADMIN']))
   activateUser(@Body() activateUserDto: ActivateUserDto): Promise<User> {
     return this.authService.activateUser(activateUserDto);
+  }
+
+  @Post('token')
+  @UseGuards(AuthGuard())
+  token(@getUser() user: User): Promise<LoggedDto> {
+    return this.authService.tokenIn(user._id);
   }
 
   @Get('baja/:id')
