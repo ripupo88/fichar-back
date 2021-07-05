@@ -33,7 +33,7 @@ export class getAllEmpDto {
   @IsNotEmpty()
   cif: string;
 
-  activeUsers: ActiveUsers[];
+  data: ActiveUsers[];
 }
 
 export class ActiveUsers {

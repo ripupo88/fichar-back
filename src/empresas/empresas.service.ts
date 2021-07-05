@@ -31,16 +31,15 @@ export class EmpresasService {
         alias: empresa.alias,
         name: empresa.name,
         cif: empresa.cif,
-        activeUsers: [],
+        data: [],
       };
       for (const trabajador of empresa.trabajadores) {
         const _id = new ObjectID(trabajador);
         const trabInfo = await this.userRepository.findOne({
           _id,
         });
-        if (!trabInfo.activo) continue;
-        resp.activeUsers = [
-          ...resp.activeUsers,
+        resp.data = [
+          ...resp.data,
           {
             _id: trabInfo._id,
             username: trabInfo.username,
