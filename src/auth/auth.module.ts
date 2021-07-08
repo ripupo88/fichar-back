@@ -7,9 +7,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtStrategy } from './jwt.strategy';
 import { EmpresaRepository } from 'src/empresas/empresa.repository';
+import { NotificationsModule } from 'src/notifications/notifications.module';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Module({
   imports: [
+    NotificationsModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'topsecret51',
@@ -19,7 +22,7 @@ import { EmpresaRepository } from 'src/empresas/empresa.repository';
     }),
     TypeOrmModule.forFeature([UserRepository, EmpresaRepository]),
   ],
-  providers: [AuthService, jwtStrategy],
+  providers: [AuthService, jwtStrategy, NotificationsService],
   controllers: [AuthController],
   exports: [jwtStrategy, PassportModule],
 })

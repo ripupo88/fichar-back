@@ -47,6 +47,9 @@ export class ActiveUsers {
   @IsNotEmpty()
   alias: string;
 
+  @IsString()
+  fullName: string;
+
   @IsNotEmpty()
   horaEntrada: Date;
 

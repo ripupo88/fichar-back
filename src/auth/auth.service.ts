@@ -64,6 +64,7 @@ export class AuthService {
       const accesToken = await this.jwtService.sign(payload);
       await this.userRepository.setToken(user._id, accesToken);
       delete user.password;
+      delete user.notifToken;
       delete user.Token;
       return { user, accesToken };
     } else {
@@ -72,13 +73,14 @@ export class AuthService {
   }
 
   async singIn(userData: LoginUserDto): Promise<LoggedDto> {
-    const { username, password } = userData;
+    const { username, password, notifToken } = userData;
     const user = await this.userRepository.findOne({ username });
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { username, role: user.role };
       const accesToken = await this.jwtService.sign(payload);
-      await this.userRepository.setToken(user._id, accesToken);
+      await this.userRepository.setToken(user._id, accesToken, notifToken);
       delete user.password;
+      delete user.notifToken;
       delete user.Token;
       return { user, accesToken };
     } else {

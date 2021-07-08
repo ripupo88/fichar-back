@@ -43,10 +43,13 @@ export class EmpresasService {
           {
             _id: trabInfo._id,
             username: trabInfo.username,
+            fullName: trabInfo.fullName,
             alias: trabInfo.alias,
             horaEntrada: trabInfo.horaEntrada,
             trabajando: trabInfo.trabajando,
             editable: trabInfo.editable,
+            nif: trabInfo.nif,
+            activo: trabInfo.activo,
           },
         ];
       }

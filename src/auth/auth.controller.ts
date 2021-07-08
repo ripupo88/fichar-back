@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { NotificationsService } from 'src/notifications/notifications.service';
 import { RoleGuard } from 'src/shared/role.guard';
 import { AuthService } from './auth.service';
 import {
@@ -13,7 +14,10 @@ import { User } from './user.entity';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private notification: NotificationsService,
+  ) {}
 
   @Post('singup')
   SingUp(@Body() userData: CreateUserDto): Promise<LoggedDto> {
@@ -22,6 +26,7 @@ export class AuthController {
 
   @Post('singin')
   SingIn(@Body() userData: LoginUserDto): Promise<LoggedDto> {
+    this.notification.getUsers();
     return this.authService.singIn(userData);
   }
 

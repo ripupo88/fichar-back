@@ -14,8 +14,8 @@ export class UserRepository extends Repository<User> {
     super();
   }
 
-  async setToken(_id: ObjectID, token: string) {
-    await this.update({ _id }, { Token: token });
+  async setToken(_id: ObjectID, token: string, notifToken?: string) {
+    await this.update({ _id }, { Token: token, notifToken });
   }
 
   async validateToken(token: string) {

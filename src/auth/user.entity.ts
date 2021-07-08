@@ -35,6 +35,9 @@ export class User {
   @Column()
   Token?: string;
 
+  @Column()
+  notifToken?: string;
+
   @Column('boolean', { default: true })
   activo: boolean;
 

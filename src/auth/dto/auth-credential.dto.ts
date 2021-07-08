@@ -28,6 +28,9 @@ export class CreateUserDto {
   @IsString()
   @Matches(/\d{6}/, { message: 'Codigo de empresa incorrecto' })
   code?: string;
+
+  @IsString()
+  notifToken: string;
 }
 
 export class LoginUserDto {
@@ -43,6 +46,9 @@ export class LoginUserDto {
     message: 'Contraseña muy devil',
   })
   password: string;
+
+  @IsString()
+  notifToken: string;
 }
 
 export class ActivateUserDto {
