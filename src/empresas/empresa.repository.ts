@@ -2,6 +2,7 @@ import { ConflictException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CrearEmpresaDto } from './dto/Empresa.dto';
 import { Empresa } from './empresa.entity';
+import { generateQR } from './helpers/genQR';
 
 @EntityRepository(Empresa)
 export class EmpresaRepository extends Repository<Empresa> {
@@ -19,10 +20,12 @@ export class EmpresaRepository extends Repository<Empresa> {
       code = Math.round(Math.random() * 899999 + 100000).toString();
       codeExist = await this.find({ code });
     } while (codeExist.length > 0);
+    const qrurl = await generateQR(code);
     const empresa: Empresa = this.create({
       ...crearEmpresDto,
       trabajadores: [],
       admins: [crearEmpresDto.admins._id.toString()],
+      qrurl,
       code,
     });
     const newEmpresa = await this.save(empresa);

@@ -1,5 +1,16 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
+import { createReadStream } from 'fs';
 import { getUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { RoleGuard } from 'src/shared/role.guard';
@@ -24,5 +35,16 @@ export class EmpresasController {
   @Get()
   async getAllEmpresas(@getUser() user: User): Promise<getAllEmpDto[]> {
     return await this.empresasService.getAllEmpresas(user._id.toString());
+  }
+
+  @Get(':code')
+  @HttpCode(201)
+  getFile(@Param('code') code: string, @Res() res: Response) {
+    const lostream = createReadStream(`./qrcode/${code}.pdf`);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=${code}.pdf`,
+    });
+    lostream.pipe(res);
   }
 }

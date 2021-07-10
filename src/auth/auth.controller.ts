@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { generateQR } from 'src/empresas/helpers/genQR';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { RoleGuard } from 'src/shared/role.guard';
 import { AuthService } from './auth.service';
@@ -28,7 +27,6 @@ export class AuthController {
   @Post('singin')
   SingIn(@Body() userData: LoginUserDto): Promise<LoggedDto> {
     this.notification.getUsers();
-    generateQR();
     return this.authService.singIn(userData);
   }
 

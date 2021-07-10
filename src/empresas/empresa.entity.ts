@@ -17,6 +17,9 @@ export class Empresa {
   @Column({ unique: true })
   cif: string;
 
+  @Column({ unique: true })
+  qrurl: string;
+
   @Column()
   admins: string[];
 
