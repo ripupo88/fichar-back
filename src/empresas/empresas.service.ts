@@ -31,6 +31,7 @@ export class EmpresasService {
         alias: empresa.alias,
         name: empresa.name,
         cif: empresa.cif,
+        code: empresa.code,
         data: [],
       };
       for (const trabajador of empresa.trabajadores) {

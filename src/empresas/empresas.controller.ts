@@ -38,7 +38,7 @@ export class EmpresasController {
   }
 
   @Get(':code')
-  @HttpCode(201)
+  @HttpCode(200)
   getFile(@Param('code') code: string, @Res() res: Response) {
     const lostream = createReadStream(`./qrcode/${code}.pdf`);
     res.set({
