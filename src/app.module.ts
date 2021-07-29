@@ -5,8 +5,10 @@ import { DatabaseModule } from './database/database.module';
 import { EmpresasModule } from './empresas/empresas.module';
 import { RegistrosModule } from './registros/registros.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { SocketGateway } from './gateway/socket.gateway';
 
 @Module({
   imports: [TasksModule, AuthModule, DatabaseModule, EmpresasModule, RegistrosModule, NotificationsModule],
+  providers: [SocketGateway],
 })
 export class AppModule {}
