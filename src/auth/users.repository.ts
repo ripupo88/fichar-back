@@ -20,7 +20,6 @@ export class UserRepository extends Repository<User> {
 
   async validateToken(token: string) {
     const user = await this.findOne({ Token: token });
-    console.log(user);
     if (user) return true;
     return false;
   }
