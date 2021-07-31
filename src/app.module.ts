@@ -8,7 +8,14 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { SocketGateway } from './gateway/socket.gateway';
 
 @Module({
-  imports: [TasksModule, AuthModule, DatabaseModule, EmpresasModule, RegistrosModule, NotificationsModule],
+  imports: [
+    TasksModule,
+    AuthModule,
+    DatabaseModule,
+    EmpresasModule,
+    RegistrosModule,
+    NotificationsModule,
+  ],
   providers: [SocketGateway],
 })
 export class AppModule {}

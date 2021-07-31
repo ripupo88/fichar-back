@@ -36,6 +36,14 @@ export class UserRepository extends Repository<User> {
       editable: true,
       trabajaPara: empresaId,
       password: hashedPass,
+      activo: true,
+      notif: {
+        entrada: true,
+        llegaTarde: true,
+        nuevoDisp: true,
+        salida: true,
+        salidaTemprano: true,
+      },
     });
     const userCreated = await this.save(user);
     return userCreated._id.toString();

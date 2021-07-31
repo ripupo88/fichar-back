@@ -24,6 +24,6 @@ import { NotificationsService } from 'src/notifications/notifications.service';
   ],
   providers: [AuthService, jwtStrategy, NotificationsService],
   controllers: [AuthController],
-  exports: [jwtStrategy, PassportModule],
+  exports: [jwtStrategy, PassportModule, AuthService],
 })
 export class AuthModule {}

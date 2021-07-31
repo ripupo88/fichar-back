@@ -17,7 +17,15 @@ import { JwtService } from '@nestjs/jwt';
 import { EmpresaRepository } from 'src/empresas/empresa.repository';
 import { Empresa } from 'src/empresas/empresa.entity';
 import { User } from './user.entity';
-import { ObjectID } from 'typeorm';
+import { ObjectID } from 'mongodb';
+
+export type Notif = {
+  entrada: boolean;
+  salida: boolean;
+  llegaTarde: boolean;
+  salidaTemprano: boolean;
+  nuevoDisp: boolean;
+};
 
 @Injectable()
 export class AuthService {
@@ -105,6 +113,12 @@ export class AuthService {
   async stopUser(userID: string) {
     const _id = new ObjectID(userID);
     await this.userRepository.update({ _id }, { activo: false });
+    return await this.userRepository.findOne({ _id });
+  }
+
+  async setNotifUser(userID: string, notif: Notif) {
+    const _id = new ObjectID(userID);
+    await this.userRepository.update({ _id }, { notif });
     return await this.userRepository.findOne({ _id });
   }
 }

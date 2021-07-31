@@ -13,5 +13,6 @@ import { UserRepository } from 'src/auth/users.repository';
   ],
   providers: [EmpresasService],
   controllers: [EmpresasController],
+  exports: [EmpresasService],
 })
 export class EmpresasModule {}

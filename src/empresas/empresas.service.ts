@@ -51,8 +51,10 @@ export class EmpresasService {
             editable: trabInfo.editable,
             nif: trabInfo.nif,
             activo: trabInfo.activo,
+            notif: trabInfo.notif,
           },
         ];
+        // console.log(resp.data);
       }
       res = [...res, resp];
     }
