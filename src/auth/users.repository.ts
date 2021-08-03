@@ -15,7 +15,10 @@ export class UserRepository extends Repository<User> {
   }
 
   async setToken(_id: ObjectID, token: string, notifToken?: string) {
-    await this.update({ _id }, { Token: token, notifToken });
+    const dataToUpdate = notifToken
+      ? { Token: token, notifToken }
+      : { Token: token };
+    await this.update({ _id }, dataToUpdate);
   }
 
   async validateToken(token: string) {
@@ -26,24 +29,30 @@ export class UserRepository extends Repository<User> {
 
   async createUser(
     userData: CreateUserDto,
+    empresaAdmins?: string[],
     empresaId?: string,
   ): Promise<string> {
     const { password } = userData;
     const salt = await bcrypt.genSalt();
     const hashedPass = await bcrypt.hash(password, salt);
+    const notif = empresaAdmins?.map((item) => {
+      return {
+        admin: item,
+        entrada: true,
+        llegaTarde: true,
+        nuevoDisp: true,
+        salida: true,
+        salidaTemprano: true,
+      };
+    });
+
     const user = this.create({
       ...userData,
       editable: true,
       trabajaPara: empresaId,
       password: hashedPass,
       activo: true,
-      notif: {
-        entrada: true,
-        llegaTarde: true,
-        nuevoDisp: true,
-        salida: true,
-        salidaTemprano: true,
-      },
+      notif,
     });
     const userCreated = await this.save(user);
     return userCreated._id.toString();

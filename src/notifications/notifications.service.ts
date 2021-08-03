@@ -5,6 +5,22 @@ import { FirebaseMessagingService } from '@aginix/nestjs-firebase-admin';
 export class NotificationsService {
   constructor(private messagingService: FirebaseMessagingService) {}
 
+  entrada(userId: string, notifToken: string) {
+    console.log('noti token', notifToken);
+    return this.messagingService.messaging.send({
+      token: notifToken,
+      android: {
+        notification: {
+          sound: 'default',
+        },
+      },
+      notification: {
+        title: `${userId || 'noname'} fichó la entrada`,
+        body: `${userId || 'noname'} acaba de fichar la entrada por QR`,
+      },
+    });
+  }
+
   getUsers() {
     return this.messagingService.messaging.send({
       token:

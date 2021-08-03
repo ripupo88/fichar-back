@@ -40,6 +40,7 @@ export class AuthService {
   async singUp(userData: CreateUserDto): Promise<LoggedDto> {
     const { username, role, code } = userData;
     let empresaId: string;
+    let empresaAdmins: string[];
     const exist = await this.userRepository.find({ username });
     if (exist.length > 0) throw new ConflictException('El usuario ya existe');
     let empresa: Empresa[];
@@ -53,9 +54,14 @@ export class AuthService {
             'Empresa no encontrada, revice su código',
           );
         empresaId = empresa[0]._id.toString();
+        empresaAdmins = empresa[0].admins;
       }
     }
-    const userId = await this.userRepository.createUser(userData, empresaId);
+    const userId = await this.userRepository.createUser(
+      userData,
+      empresaAdmins,
+      empresaId,
+    );
 
     if (role === 'USER')
       await this.empresaRepository.update(
@@ -116,8 +122,17 @@ export class AuthService {
     return await this.userRepository.findOne({ _id });
   }
 
-  async setNotifUser(userID: string, notif: Notif) {
+  async setNotifUser(admin: string, userID: string, notifi: Notif) {
     const _id = new ObjectID(userID);
+    const user = await this.userRepository.findOne({ _id });
+    const notif = user.notif.map((item) => {
+      if (item.admin === admin) {
+        return { ...item, ...notifi };
+      } else {
+        return item;
+      }
+    });
+
     await this.userRepository.update({ _id }, { notif });
     return await this.userRepository.findOne({ _id });
   }

@@ -27,13 +27,16 @@ export class User {
   horaEntrada: Date;
 
   @Column()
-  notif: {
-    entrada: boolean;
-    salida: boolean;
-    llegaTarde: boolean;
-    salidaTemprano: boolean;
-    nuevoDisp: boolean;
-  };
+  notif: [
+    {
+      admin: string;
+      entrada: boolean;
+      salida: boolean;
+      llegaTarde: boolean;
+      salidaTemprano: boolean;
+      nuevoDisp: boolean;
+    },
+  ];
 
   @Column({ default: true })
   editable: boolean;

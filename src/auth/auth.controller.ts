@@ -26,7 +26,7 @@ export class AuthController {
 
   @Post('singin')
   SingIn(@Body() userData: LoginUserDto): Promise<LoggedDto> {
-    // this.notification.getUsers();
+    console.log(userData);
     return this.authService.singIn(userData);
   }
 

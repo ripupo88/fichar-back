@@ -7,8 +7,6 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { AuthService, Notif } from 'src/auth/auth.service';
-import { getUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
 import { EmpresasService } from 'src/empresas/empresas.service';
 
 @WebSocketGateway(3003, { cors: { origin: '*' } })
@@ -41,10 +39,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('user')
-  async handleUser(client: Socket, payload: Notif & { userId: string }) {
-    const { userId } = payload;
+  async handleUser(
+    client: Socket,
+    payload: Notif & { userId: string; admin: string },
+  ) {
+    const { userId, admin } = payload;
     delete payload.userId;
-    await this.authService.setNotifUser(userId, payload);
+    delete payload.admin;
+    console.log(payload);
+    await this.authService.setNotifUser(admin, userId, payload);
 
     // const resp = await this.empresaServise.getAllEmpresas(payload.user);
     // if (payload !== 65) {

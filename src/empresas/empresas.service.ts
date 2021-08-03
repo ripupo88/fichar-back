@@ -39,6 +39,7 @@ export class EmpresasService {
         const trabInfo = await this.userRepository.findOne({
           _id,
         });
+        const notif = trabInfo.notif.filter((data) => data.admin === user);
         resp.data = [
           ...resp.data,
           {
@@ -51,13 +52,14 @@ export class EmpresasService {
             editable: trabInfo.editable,
             nif: trabInfo.nif,
             activo: trabInfo.activo,
-            notif: trabInfo.notif,
+            notif: notif[0],
           },
         ];
         // console.log(resp.data);
       }
       res = [...res, resp];
     }
+    console.log(res);
     return res;
   }
 }

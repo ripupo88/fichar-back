@@ -4,6 +4,8 @@ import { User } from 'src/auth/user.entity';
 import { UserRepository } from 'src/auth/users.repository';
 import { EmpresaRepository } from 'src/empresas/empresa.repository';
 import { RegistroRepository } from './registro.repository';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { ObjectID } from 'mongodb';
 
 @Injectable()
 export class RegistrosService {
@@ -13,12 +15,13 @@ export class RegistrosService {
     @InjectRepository(UserRepository) private userRepository: UserRepository,
     @InjectRepository(RegistroRepository)
     private registroRepository: RegistroRepository,
+    private notificationsService: NotificationsService,
   ) {}
 
   async fichaEntrada(empresaId: string, user: User) {
+    ///////Validaciones////////
     if (user.trabajando)
       throw new BadRequestException('Este usuario ya tiene un turno abierto');
-
     const empresa = await this.empresaRepository.findOne({ code: empresaId });
     if (!empresa || !empresa.trabajadores.includes(user._id.toString()))
       throw new BadRequestException('Codigo de empresa incorrecto');
@@ -28,11 +31,10 @@ export class RegistrosService {
       year: date.getFullYear(),
       trabajador: user._id.toString(),
     });
-
     if (!!repetido) {
       throw new BadRequestException('Hoy ya se ha fichado');
     }
-
+    ////////Fichando////////
     const registro = this.registroRepository.create({
       entrada: date.toISOString(),
       dia: date.getDate(),
@@ -41,13 +43,19 @@ export class RegistrosService {
       finalizado: false,
       trabajador: user._id.toString(),
     });
-
     await this.registroRepository.save(registro);
     await this.userRepository.update(
       { _id: user._id },
       { trabajando: true, horaEntrada: date.toISOString() },
     );
-
+    //////notificar///////
+    user.notif.map(async (item) => {
+      const tokenNotif = await this.userRepository.findOne({
+        _id: new ObjectID(item.admin),
+      });
+      if (item.entrada)
+        this.notificationsService.entrada(user.alias, tokenNotif.notifToken);
+    });
     return await this.registroRepository.findOne({ _id: registro._id });
   }
 

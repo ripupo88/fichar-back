@@ -17,5 +17,6 @@ import * as serviceAccount from '../../service.json';
       }),
     }),
   ],
+  exports: [NotificationsService],
 })
 export class NotificationsModule {}
