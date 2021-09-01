@@ -53,6 +53,9 @@ export class ActiveUsers {
   @IsNotEmpty()
   horaEntrada: Date;
 
+  @IsNotEmpty()
+  horaSalida: Date;
+
   @IsBoolean()
   @IsNotEmpty()
   trabajando: boolean;

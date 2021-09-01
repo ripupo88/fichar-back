@@ -1,22 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { FirebaseMessagingService } from '@aginix/nestjs-firebase-admin';
 
+type NotifObject = {
+  token: string;
+  title: string;
+  body: string;
+};
 @Injectable()
 export class NotificationsService {
   constructor(private messagingService: FirebaseMessagingService) {}
 
   entrada(userId: string, notifToken: string) {
-    console.log('noti token', notifToken);
-    return this.messagingService.messaging.send({
+    const notifObject: NotifObject = {
       token: notifToken,
+      title: `${userId || 'Sin nombre'} fichó la entrada`,
+      body: `${userId || 'Sin nombre'} acaba de fichar su entrada por QR`,
+    };
+    this.notificate(notifObject);
+  }
+  salida(userId: string, notifToken: string) {
+    const notifObject: NotifObject = {
+      token: notifToken,
+      title: `${userId || 'Sin nombre'} fichó la salida`,
+      body: `${userId || 'Sin nombre'} acaba de fichar su salida por QR`,
+    };
+    this.notificate(notifObject);
+  }
+
+  private notificate(data: NotifObject) {
+    const { token, body, title } = data;
+    return this.messagingService.messaging.send({
+      token,
       android: {
         notification: {
+          visibility: 'public',
+          defaultSound: true,
           sound: 'default',
+          title,
+          body,
         },
-      },
-      notification: {
-        title: `${userId || 'noname'} fichó la entrada`,
-        body: `${userId || 'noname'} acaba de fichar la entrada por QR`,
       },
     });
   }

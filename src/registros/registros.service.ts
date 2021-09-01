@@ -46,7 +46,7 @@ export class RegistrosService {
     await this.registroRepository.save(registro);
     await this.userRepository.update(
       { _id: user._id },
-      { trabajando: true, horaEntrada: date.toISOString() },
+      { trabajando: true, horaEntrada: date.toISOString(), horaSalida: '' },
     );
     //////notificar///////
     user.notif.map(async (item) => {
@@ -80,8 +80,16 @@ export class RegistrosService {
     );
     await this.userRepository.update(
       { _id: user._id },
-      { trabajando: false, horaEntrada: '' },
+      { trabajando: false, horaSalida: registro.salida },
     );
+
+    user.notif.map(async (item) => {
+      const tokenNotif = await this.userRepository.findOne({
+        _id: new ObjectID(item.admin),
+      });
+      if (item.salida)
+        this.notificationsService.salida(user.alias, tokenNotif.notifToken);
+    });
 
     return await this.registroRepository.findOne({
       trabajador: user._id.toString(),

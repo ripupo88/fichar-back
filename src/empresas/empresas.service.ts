@@ -48,6 +48,7 @@ export class EmpresasService {
             fullName: trabInfo.fullName,
             alias: trabInfo.alias,
             horaEntrada: trabInfo.horaEntrada,
+            horaSalida: trabInfo.horaSalida,
             trabajando: trabInfo.trabajando,
             editable: trabInfo.editable,
             nif: trabInfo.nif,

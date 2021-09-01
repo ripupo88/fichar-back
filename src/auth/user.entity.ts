@@ -27,6 +27,9 @@ export class User {
   horaEntrada: Date;
 
   @Column()
+  horaSalida: Date;
+
+  @Column()
   notif: [
     {
       admin: string;
@@ -46,6 +49,9 @@ export class User {
 
   @Column()
   Token?: string;
+
+  @Column()
+  profilePic?: string;
 
   @Column()
   notifToken?: string;
